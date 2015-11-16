@@ -15,8 +15,7 @@ setup(
     packages = ['pgeg'],
     url = 'http://pypi.python.org/pypi/pgeg',
     license = 'LINCESE',
-    author='Kent Kawashima',
-    description = 'Python objects and fucntions for population and evolutionary genetics analysis'
+    description = 'Python objects and fucntions for population and evolutionary genetics analysis',
 
     # Required packages
     requires = [
