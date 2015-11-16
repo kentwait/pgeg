@@ -1,13 +1,14 @@
 from matplotlib import pyplot as plt
 import numpy as np
+from .stats import ci
 
 
 def plot_ci_graph(y, x,
                   y_err_series=None, x_err_series=None,
                   colors=None, shapes=None, labels=None,
                   line=False, markersize=15, fill=True, grid=True, legend=True, legendloc='center',
-                  ylim=None, xlim=None, xlabel='', ylabel='', figsize=(12,8)):
-    """Construct a confidence interval plot given stacked-x, -y, -xerr, and -yerr arrays.
+                  ylim=None, xlim=None, xlabel='', ylabel='', figsize=(12, 8)):
+    """Construct a confidence interval plot given stacked-x, -y, -xerr, and -yerr arrays
 
     Parameters
     ----------
@@ -29,6 +30,16 @@ def plot_ci_graph(y, x,
         Descriptive names for each dataset to be listed in the legend.
     line : bool
         Whether to draw a line connecting x data
+    markersize
+    fill
+    grid
+    legend
+    legendloc
+    ylim
+    xlim
+    xlabel
+    ylabel
+    figsize
 
     Returns
     -------
@@ -36,7 +47,7 @@ def plot_ci_graph(y, x,
 
     """
     assert len(x) == len(y)
-    x_array, y_array = map(np.array, [x,y])
+    x_array, y_array = map(np.array, (x, y))
     plt.figure(figsize=figsize)
     ax = plt.subplot(111)
     line_char = '-' if line else ''
@@ -45,21 +56,24 @@ def plot_ci_graph(y, x,
     labels = ['data {}'.format(i) for i in range(1, len(x) + 1)] if labels is None else labels
     assert len(x) == len(labels)
     for i in range(x_array.shape[0]):
-        color = colors[i] if i < len(colors) else colors[i%len(colors)]
-        shape = shapes[i] if i < len(shapes) else shapes[i%len(shapes)]
+        color = colors[i] if i < len(colors) else colors[i % len(colors)]
+        shape = shapes[i] if i < len(shapes) else shapes[i % len(shapes)]
         ax.errorbar(y=y_array[i], x=x_array[i],
-                    yerr=y_err_series[i] if y_err_series is not None else None,
-                    xerr=x_err_series[i] if x_err_series is not None else None,
+                    yerr=y_err_series[i] if isinstance(y_err_series, list) else None,
+                    xerr=x_err_series[i] if isinstance(x_err_series, list) else None,
                     marker=shape, linestyle=line_char, markersize=markersize,
                     markeredgecolor='#ffffff' if fill else color,
                     markerfacecolor=color if fill else 'none',
                     markeredgewidth=1,
                     ecolor=color, label=labels[i])
-    if xlim: ax.set_xlim(xlim)
-    if ylim: ax.set_ylim(ylim)
+    if xlim:
+        ax.set_xlim(xlim)
+    if ylim:
+        ax.set_ylim(ylim)
     ax.set_xlabel(xlabel)
     ax.set_ylabel(ylabel)
-    if grid: ax.grid()
+    if grid:
+        ax.grid()
 
     if legend:
         # Adjust subplot
@@ -67,10 +81,14 @@ def plot_ci_graph(y, x,
         # Draw legend
         handles, labels = ax.get_legend_handles_labels()
         ax.set_position([box.x0, box.y0, box.width * 0.8, box.height])
-        if legendloc == 'upper': anchor = (1,1)
-        elif legendloc == 'center': anchor = (1,0.5)
-        elif legendloc == 'lower': anchor = (1,0)
-        else: raise Exception('legendloc must be "upper", "center", or "lower"')
+        if legendloc == 'upper':
+            anchor = (1, 1)
+        elif legendloc == 'center':
+            anchor = (1, 0.5)
+        elif legendloc == 'lower':
+            anchor = (1, 0)
+        else:
+            raise Exception('legendloc must be "upper", "center", or "lower"')
         ax.legend(handles, labels, loc='{} left'.format(legendloc), bbox_to_anchor=anchor, numpoints=1, fontsize=16)
 
     return ax
@@ -80,8 +98,8 @@ def plot_heatmap(df, cmap='RdBu_r', vmin=-0.5, vmax=0.5,
                  row_labels=None, col_labels=None, row_labelsize=14, col_labelsize=14,
                  row_title='', col_title='', row_titlesize=16, col_titlesize=16,
                  legend_label='', legend_labelsize=14,
-                 figsize=(12,8), alpha=1.0):
-    """Construct a heatmap from a DataFrame.
+                 figsize: tuple = (12, 8), alpha=1.0):
+    """Construct a heatmap from a DataFrame
 
     Parameters
     ----------
@@ -123,8 +141,10 @@ def plot_heatmap(df, cmap='RdBu_r', vmin=-0.5, vmax=0.5,
 
     ax.tick_params(axis='both', tick1On=False, tick2On=False)
     ax.tick_params(axis='both', tick1On=False, tick2On=False)
-    if col_title: ax.set_xlabel(col_title, size=col_titlesize)
-    if row_title: ax.set_ylabel(row_title, size=row_titlesize)
+    if col_title:
+        ax.set_xlabel(col_title, size=col_titlesize)
+    if row_title:
+        ax.set_ylabel(row_title, size=row_titlesize)
 
     row_labels = [i for i in range(df.shape[0])] if row_labels is None else row_labels
     col_labels = [i for i in range(df.shape[1])] if col_labels is None else col_labels
@@ -150,5 +170,5 @@ def error_bar_array(df, interval=0.95):
     -------
 
     """
-    data = ci(df, ci=interval)
+    data = ci(df, interval=interval)
     return np.vstack([data['lb_dist'], data['ub_dist']])

@@ -9,7 +9,7 @@ Codon_change = namedtuple('Codon_change', ['anc', 'der'])
 
 
 def generate_one_hit_codon_table():
-    """Creates a lookup table for one-hit codon changes using a numbered index.
+    """Creates a lookup table for one-hit codon changes using a numbered index
 
     Returns
     -------
