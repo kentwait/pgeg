@@ -1,15 +1,17 @@
-
-"""
-Created on Tue Oct 14 15:50:10 2014
-tajima_d.py
-@author: kent
-"""
-
-from __future__ import print_function
 import numpy as np
 
 
 def pairwise_polymorphism(pairwise_array):
+    """
+
+    Parameters
+    ----------
+    pairwise_array
+
+    Returns
+    -------
+
+    """
     counter = 0
     for i in range(len(pairwise_array[0])):
         counter += 0 if pairwise_array[0,i] == pairwise_array[1,i] else 1
@@ -17,22 +19,39 @@ def pairwise_polymorphism(pairwise_array):
 
 
 def generate_pairwise_combinations(lst):
+    """
+
+    Parameters
+    ----------
+    lst
+
+    Returns
+    -------
+
+    """
     for i in range(len(lst)):
         element1 = lst[i]
         for element2 in lst[i+1:]:
             yield (element1, element2)
 
 
-def theta_hat_pi(msa_array):
+def pairwise_genetic_diversity(msa_array):
     """Returns the average number of polymorphisms between two sequences
 
+    Parameters
+    ----------
+    msa_array
+
+    Notes
+    -----
     This is an unbiased estimator of population mutation parameter Theta
     """
     polymorphisms = []
-    for _ in generate_pairwise_combinations(msa_array):
-        count = pairwise_polymorphism(np.array(_))
+    for seq_pair in generate_pairwise_combinations(msa_array):
+        count = pairwise_polymorphism(np.array(seq_pair))
         polymorphisms.append(count)
     return sum(polymorphisms)/float(len(polymorphisms))
+
 
 def theta_hat_S(msa_array):
     '''
