@@ -1,6 +1,7 @@
 from matplotlib import pyplot as plt
 import numpy as np
 
+
 def plot_ci_graph(y, x,
                   y_err_series=None, x_err_series=None,
                   colors=None, shapes=None, labels=None,
@@ -31,7 +32,7 @@ def plot_ci_graph(y, x,
 
     Returns
     -------
-    matplotlib.axis object
+    matplotlib.axis
 
     """
     assert len(x) == len(y)
@@ -74,6 +75,7 @@ def plot_ci_graph(y, x,
 
     return ax
 
+
 def plot_heatmap(df, cmap='RdBu_r', vmin=-0.5, vmax=0.5,
                  row_labels=None, col_labels=None, row_labelsize=14, col_labelsize=14,
                  row_title='', col_title='', row_titlesize=16, col_titlesize=16,
@@ -102,7 +104,7 @@ def plot_heatmap(df, cmap='RdBu_r', vmin=-0.5, vmax=0.5,
 
     Returns
     -------
-    matplotlib.axis object
+    matplotlib.axis
 
     """
     fig, ax = plt.subplots()
@@ -134,3 +136,19 @@ def plot_heatmap(df, cmap='RdBu_r', vmin=-0.5, vmax=0.5,
     cbar.ax.tick_params(labelsize=legend_labelsize)
 
     return ax
+
+
+def error_bar_array(df, interval=0.95):
+    """
+
+    Parameters
+    ----------
+    df
+    interval
+
+    Returns
+    -------
+
+    """
+    data = ci(df, ci=interval)
+    return np.vstack([data['lb_dist'], data['ub_dist']])

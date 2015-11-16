@@ -5,6 +5,7 @@ import re
 from copy import deepcopy
 # TODO : Add proper docstrings
 
+
 class Codeml(object):
     """
     Codeml object to generate control file and run the program

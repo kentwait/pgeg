@@ -8,11 +8,13 @@ tajima_d.py
 from __future__ import print_function
 import numpy as np
 
+
 def pairwise_polymorphism(pairwise_array):
     counter = 0
     for i in range(len(pairwise_array[0])):
         counter += 0 if pairwise_array[0,i] == pairwise_array[1,i] else 1
     return counter
+
 
 def generate_pairwise_combinations(lst):
     for i in range(len(lst)):
@@ -20,11 +22,12 @@ def generate_pairwise_combinations(lst):
         for element2 in lst[i+1:]:
             yield (element1, element2)
 
+
 def theta_hat_pi(msa_array):
-    '''Returns the average number of polymorphisms between two sequences
+    """Returns the average number of polymorphisms between two sequences
 
     This is an unbiased estimator of population mutation parameter Theta
-    '''
+    """
     polymorphisms = []
     for _ in generate_pairwise_combinations(msa_array):
         count = pairwise_polymorphism(np.array(_))
